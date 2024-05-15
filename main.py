@@ -23,26 +23,28 @@ async def read_item(request: Request):
 @app.post("/predict/")
 async def predict(request: Request,
                   pclass: int = Form(...),
-                  sex_female: int = Form(...),
-                  sex_male: int = Form(...),
+                  sex: str = Form(...),
                   age: int = Form(...),
                   sibsp: int = Form(...),
                   parch: int = Form(...),
                   fare: int = Form(...),
-                  embarked_c: int = Form(...),
-                  embarked_q: int = Form(...),
-                  embarked_s: int = Form(...)):
+                  embarked: str = Form(...)):
 
-    features = [pclass, sex_female, sex_male, age, sibsp, parch, fare, embarked_c, embarked_q, embarked_s]
+    # Label encoding for 'sex' and 'embarked'
+    sex_encoder = LabelEncoder()
+    embarked_encoder = LabelEncoder()
+    sex_encoded = sex_encoder.fit_transform([sex])
+    embarked_encoded = embarked_encoder.fit_transform([embarked])
+
+    features = [pclass, sex_encoded[0], age, sibsp, parch, fare, embarked_encoded[0]]
 
     # Make prediction
     prediction = model.predict([features])[0]
     result = "likely" if prediction == 1 else "unlikely"
 
-    return templates.TemplateResponse("results.html", {"request": request, "prediction": result},
-                                      headers={"Content-Type": "text/html; charset=utf-8"})
+    return templates.TemplateResponse("results.html", {"request": request, "prediction": result})
 
 # Mounting the static files directory
 @app.get("/static/{filename}")
 async def get_static_file(filename: str):
-    return FileResponse(os.path.join(static_dir, filename), media_type="text/css")  # Added media_type
+    return FileResponse(os.path.join(static_dir, filename), media_type="text/css")
