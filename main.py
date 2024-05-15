@@ -16,12 +16,12 @@ templates_dir = os.path.join(current_dir, "templates")
 # Initialize Jinja2Templates with the correct directory
 templates = Jinja2Templates(directory=templates_dir)
 
-# Construct the absolute path to the stacking_clf.pkl file
-model_path = os.path.join(current_dir, 'MLE24Titanic', 'stacking_clf.pkl')
+# Construct the absolute path to the best_rf_clf.pkl file
+model_path = os.path.join(current_dir, 'MLE24Titanic', 'best_rf_clf.pkl')
 
 # Load the trained model
 with open(model_path, 'rb') as f:
-    stacking_clf = pickle.load(f)
+    best_rf_clf = pickle.load(f)
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -41,7 +41,7 @@ async def predict(request: Request,
                   embarked_s: int = Form(...)):
     
     # Make prediction
-    prediction = stacking_clf.predict([[pclass, sex_female, sex_male, age, sibsp, parch, fare, embarked_c, embarked_q, embarked_s]])
+    prediction = best_rf_clf.predict([[pclass, sex_female, sex_male, age, sibsp, parch, fare, embarked_c, embarked_q, embarked_s]])
     result = "likely" if prediction == 1 else "unlikely"
     
     return templates.TemplateResponse("results.html", {"request": request, "prediction": result})

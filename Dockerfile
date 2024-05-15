@@ -16,7 +16,7 @@ RUN apt-get update \
 # Install the dependencies specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Include stacking_clf.pkl in the Docker image
+# Include best_rf_clf.pkl in the Docker image
 COPY stacking_clf.pkl /app
 
 # Command to run the FastAPI application using uvicorn
