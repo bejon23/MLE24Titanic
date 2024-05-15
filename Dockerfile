@@ -17,7 +17,7 @@ RUN apt-get update \
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Include best_rf_clf.pkl in the Docker image
-COPY stacking_clf.pkl /app
+COPY best_rf_clf.pkl /app
 
 # Command to run the FastAPI application using uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
