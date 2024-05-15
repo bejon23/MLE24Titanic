@@ -1,33 +1,30 @@
 from fastapi import FastAPI, Form, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse , FileResponse
 from fastapi.templating import Jinja2Templates
 from sklearn.preprocessing import LabelEncoder
 import pickle
 import os
 
+
 app = FastAPI()
 
-# Get the absolute path of the current file.
-current_dir = os.path.dirname(os.path.abspath(__file__))
+# Load the trained model
+with open(best_rf_clf, 'rb') as file:
+    model = pickle.load(file)
 
-# Construct the path to the templates directory.
-templates_dir = os.path.join(current_dir, "templates")
-
-# Initialize Jinja2Templates with the correct directory
+# Assuming main.py is in the same directory as the templates and static directories
+templates_dir = os.path.join(os.path.dirname(__file__), "templates")
+static_dir = os.path.join(os.path.dirname(__file__), "static")
 templates = Jinja2Templates(directory=templates_dir)
 
-# Construct the absolute path to the best_rf_clf.pkl file
-model_path = os.path.join(current_dir, 'MLE24Titanic', 'best_rf_clf.pkl')
 
-# Load the trained model
-with open(model_path, 'rb') as f:
-    best_rf_clf = pickle.load(f)
+#pdb.set_trace()  # Set breakpoint here
 
 @app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
+async def read_item(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.post("/predict", response_class=HTMLResponse)
+@app.post("/predict/")
 async def predict(request: Request, 
                   pclass: int = Form(...), 
                   sex_female: int = Form(...), 
@@ -39,9 +36,22 @@ async def predict(request: Request,
                   embarked_c: int = Form(...), 
                   embarked_q: int = Form(...), 
                   embarked_s: int = Form(...)):
+
+  #pdb.set_trace()  # Set breakpoint here
+
+	features = [pclass, sex, age, sibsp, parch, fare, embarked]
     
     # Make prediction
-    prediction = best_rf_clf.predict([[pclass, sex_female, sex_male, age, sibsp, parch, fare, embarked_c, embarked_q, embarked_s]])
+    prediction = model.predict([features])[0]
     result = "likely" if prediction == 1 else "unlikely"
     
-    return templates.TemplateResponse("results.html", {"request": request, "prediction": result})
+    return templates.TemplateResponse("results.html", {"request": request, "prediction": result},
+					 headers={"Content-Type": "text/html; charset=utf-8"})
+
+
+# Mounting the static files directory
+@app.get("/static/{filename}")
+async def get_static_file(filename: str):
+    return FileResponse(os.path.join(static_dir, filename), media_type="text/css")  # Added media_type
+
+
