@@ -17,7 +17,7 @@ templates_dir = os.path.join(os.path.dirname(__file__), "templates")
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 templates = Jinja2Templates(directory=templates_dir)
 
-#pdb.set_trace()  # Set breakpoint here
+pdb.set_trace()  # Set breakpoint here
 
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request):
@@ -40,7 +40,7 @@ async def predict(request: Request,
     embarked_encoded = embarked_encoder.fit_transform([embarked])
 
     features = [pclass, sex_encoded[0], age, sibsp, parch, fare, embarked_encoded[0]]
-#pdb.set_trace()  # Set breakpoint here
+pdb.set_trace()  # Set breakpoint here
 
     # Make prediction
     prediction = model.predict([features])[0]
