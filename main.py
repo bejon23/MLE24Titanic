@@ -30,16 +30,16 @@ async def predict(request: Request,
                   parch: int = Form(...),
                   fare: int = Form(...),
                   embarked: str = Form(...),
-                  survived: int = Form(...),
+                  
                   familysize: int = Form(...)):
 
     # Label encoding for 'sex' and 'embarked'
-    sex_encoder = LabelEncoder()
-    embarked_encoder = LabelEncoder()
-    sex_encoded = sex_encoder.fit_transform([sex])
-    embarked_encoded = embarked_encoder.fit_transform([embarked])
+    #sex_encoder = LabelEncoder()
+    #embarked_encoder = LabelEncoder()
+    #sex_encoded = sex_encoder.fit_transform([sex])
+    #embarked_encoded = embarked_encoder.fit_transform([embarked])
 
-    features = [pclass, sex_encoded[0], age, sibsp, parch, fare, embarked_encoded[0], survived, familysize]  # Update features list
+    features = [pclass, age, sibsp, parch, fare, sex, embarked, familysize]  # Update features list
 
     # Make prediction
     prediction = model.predict([features])[0]
