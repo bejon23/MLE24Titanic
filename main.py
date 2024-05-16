@@ -4,7 +4,6 @@ from fastapi.templating import Jinja2Templates
 from sklearn.preprocessing import LabelEncoder
 import pickle
 import os
-import pdb
 
 app = FastAPI()
 
@@ -30,16 +29,11 @@ async def predict(request: Request,
                   parch: int = Form(...),
                   fare: int = Form(...),
                   embarked: str = Form(...),
-                  
                   familysize: int = Form(...)):
 
-    # Label encoding for 'sex' and 'embarked'
-    #sex_encoder = LabelEncoder()
-    #embarked_encoder = LabelEncoder()
-    #sex_encoded = sex_encoder.fit_transform([sex])
-    #embarked_encoded = embarked_encoder.fit_transform([embarked])
-
-    features = [pclass, age, sibsp, parch, fare, sex, embarked, familysize]  # Update features list
+    # Convert categorical features from string to numerical values if necessary
+    # Assuming 'sex' and 'embarked' are already mapped to numerical values outside of the script
+    features = [pclass, sex, age, sibsp, parch, fare, embarked, familysize]
 
     # Make prediction
     prediction = model.predict([features])[0]
