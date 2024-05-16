@@ -16,6 +16,12 @@ templates_dir = os.path.join(os.path.dirname(__file__), "templates")
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 templates = Jinja2Templates(directory=templates_dir)
 
+# Label encoder for 'Sex'
+sex_encoder = LabelEncoder()
+
+# Label encoder for 'Embarked'
+embarked_encoder = LabelEncoder()
+
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
@@ -31,9 +37,13 @@ async def predict(request: Request,
                   embarked: str = Form(...),
                   familysize: int = Form(...)):
 
-    # Convert categorical features from string to numerical values if necessary
-    # Assuming 'sex' and 'embarked' are already mapped to numerical values outside of the script
-    features = [pclass, sex, age, sibsp, parch, fare, embarked, familysize]
+    # Convert 'Sex' to numerical value using label encoding
+    sex_encoded = sex_encoder.transform([sex])
+
+   # Convert 'Embarked' to numerical value using label encoding
+    embarked_encoded = embarked_encoder.transform([embarked])
+
+    features = [pclass, sex_encoded[0], age, sibsp, parch, fare, embarked, familysize]
 
     # Make prediction
     prediction = model.predict([features])[0]
