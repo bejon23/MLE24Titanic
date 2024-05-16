@@ -34,7 +34,7 @@ async def predict(request: Request,
 
     # Make prediction
     prediction = model.predict([features])[0]
-    result = "likely" if prediction == 1 else "unlikely"
+    result = "High probability for " if prediction == 1 else "Very less probability "
 
     return templates.TemplateResponse("results.html", {"request": request, "prediction": result})
 
