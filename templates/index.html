@@ -7,33 +7,35 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Titanic Survival Prediction</h1>
-    <form action="/predict/" method="post">
-        <label for="pclass">Passenger Class:</label>
-        <input type="number" id="pclass" name="pclass" required>
-        <label for="sex">Sex:</label>
-        <select id="sex" name="sex" required>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-        </select>
-        <label for="age">Age:</label>
-        <input type="number" id="age" name="age" required>
-        <label for="sibsp">Number of Siblings/Spouses Aboard:</label>
-        <input type="number" id="sibsp" name="sibsp" required>
-        <label for="parch">Number of Parents/Children Aboard:</label>
-        <input type="number" id="parch" name="parch" required>
-        <label for="fare">Fare:</label>
-        <input type="number" id="fare" name="fare" required>
-        <label for="embarked">Port of Embarkation:</label>
-        <select id="embarked" name="embarked" required>
-            <option value="C">Cherbourg</option>
-            <option value="Q">Queenstown</option>
-            <option value="S">Southampton</option>
-        
-        </select>
-        <label for="familysize">Family Size:</label>
-        <input type="number" id="familysize" name="familysize" required>
-        <button type="submit">Predict Survival</button>
-    </form>
+    <div class="container">
+        <h1>Titanic Survival Prediction</h1>
+        <form action="/predict/" method="post">
+            <label for="pclass">Pclass:</label>
+            <input type="number" name="pclass" id="pclass" required><br>
+
+            <label for="sex">Sex (0 for male, 1 for female):</label>
+            <input type="number" name="sex" id="sex" required><br>
+
+            <label for="age">Age:</label>
+            <input type="number" name="age" id="age" required><br>
+
+            <label for="sibsp">SibSp:</label>
+            <input type="number" name="sibsp" id="sibsp" required><br>
+
+            <label for="parch">Parch:</label>
+            <input type="number" name="parch" id="parch" required><br>
+
+            <label for="fare">Fare:</label>
+            <input type="number" name="fare" id="fare" required><br>
+
+            <label for="embarked">Embarked (0 for C, 1 for Q, 2 for S):</label>
+            <input type="number" name="embarked" id="embarked" required><br>
+
+            <label for="familysize">Family Size:</label>
+            <input type="number" name="familysize" id="familysize" required><br>
+
+            <button type="submit">Predict</button>
+        </form>
+    </div>
 </body>
 </html>
