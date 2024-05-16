@@ -30,6 +30,13 @@
             <option value="Q">Queenstown</option>
             <option value="S">Southampton</option>
         </select>
+        <label for="survived">Survived:</label>
+        <select id="survived" name="survived" required>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+        </select>
+        <label for="familysize">Family Size:</label>
+        <input type="number" id="familysize" name="familysize" required>
         <button type="submit">Predict Survival</button>
     </form>
 </body>
